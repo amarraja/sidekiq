@@ -4,6 +4,8 @@ require 'sidekiq/util'
 require 'sidekiq/redis_connection'
 require 'sidekiq/client'
 require 'sidekiq/manager'
+require 'sidekiq/server'
+require 'vegas'
 
 module Sidekiq
   class CLI
@@ -16,6 +18,11 @@ module Sidekiq
     end
 
     FOREVER = 2_000_000_000
+
+    def serve
+      Sidekiq::Client.redis = RedisConnection.create(:url => @options[:server], :namespace => @options[:namespace], :use_pool => false)
+      Vegas::Runner.new(Sidekiq::Server, 'sidekiq_server')
+    end
 
     def run
       Sidekiq::Client.redis = RedisConnection.create(:url => @options[:server], :namespace => @options[:namespace], :use_pool => true)

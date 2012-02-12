@@ -1,0 +1,26 @@
+<% for queue in @client.redis.keys("queue:*") %>
+	<h2><%= queue %></strong><h2>
+
+	<div>Waiting messages</div>
+
+	<% @client.redis.lrange(queue, 0, 1000) %>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Class</th>
+				<th>Args</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% for message in @client.redis.lrange(queue, 0, 1000).map{ |m| MultiJson.decode(m) } %>
+			<tr>
+				<td><%= message['class'] %></td>
+				<td><%= message['args'] %></td>
+				<td></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+
+<% end %>

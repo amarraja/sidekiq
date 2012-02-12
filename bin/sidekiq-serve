@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'sidekiq/cli'
+rescue LoadError
+  # Better way to do this in dev?
+  dir = File.expand_path(File.dirname(__FILE__) + '/../lib') 
+  $LOAD_PATH << dir if File.exist?("#{dir}/sidekiq.rb")
+  require 'sidekiq/cli'
+end
+
+begin
+  cli = Sidekiq::CLI.new
+  cli.serve
+rescue => e
+  raise e if $DEBUG
+  STDERR.puts e.message
+  exit 1
+end

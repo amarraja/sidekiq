@@ -18,6 +18,8 @@ Gem::Specification.new do |gem|
   gem.add_dependency                  'connection_pool'
   gem.add_dependency                  'celluloid'
   gem.add_dependency                  'multi_json'
+  gem.add_dependency                  'sinatra'
+  gem.add_dependency                  'vegas'
   gem.add_development_dependency      'minitest'
   gem.add_development_dependency      'rake'
 end
